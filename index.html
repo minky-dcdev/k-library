@@ -1,1 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K Library</title>
+  <style>
+    /* --- Basic Reset --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      background-color: #111;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    /* --- Category Container --- */
+    .category {
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 20px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+
+    .category-header {
+      background: #1a1a1a;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    .category-header:hover {
+      background: #222;
+    }
+
+    .category-header span {
+      transition: transform 0.3s;
+    }
+
+    .category-header.open span {
+      transform: rotate(90deg);
+    }
+
+    .links {
+      display: none;
+      flex-direction: column;
+      background: #111;
+    }
+
+    .links a {
+      padding: 12px 20px;
+      border-top: 1px solid #222;
+      text-decoration: none;
+      color: #00ffff;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .links a:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    /* --- Smooth animation --- */
+    .links.show {
+      display: flex;
+      animation: slideDown 0.3s ease forwards;
+    }
+
+    @keyframes slideDown {
+      0% {opacity: 0; transform: translateY(-10px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+
+    /* --- Footer --- */
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    /* --- Scrollbar Style --- */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>K Library</h1>
+
+  <!-- Coding Category -->
+  <div class="category">
+    <div class="category-header">Coding <span>▶</span></div>
+    <div class="links">
+      <!-- Templates -->
+      <strong style="padding:10px 20px;">Templates:</strong>
+      <a href="https://bootstrapmade.com/" target="_blank">BootstrapMade</a>
+      <a href="https://windytoolbox.com/" target="_blank">WindyToolbox</a>
+      <a href="https://onepagelove.com/templates/page/2" target="_blank">OnePageLove</a>
+      <a href="https://colorlib.com/wp/templates/" target="_blank">Colorlib</a>
+      <a href="https://freehtml5.co/" target="_blank">FreeHTML5</a>
+
+      <!-- UI -->
+      <strong style="padding:10px 20px;">UI:</strong>
+      <a href="https://uiverse.io/" target="_blank">Uiverse</a>
+      <a href="https://www.vengenceui.com/" target="_blank">VengenceUI</a>
+      <a href="https://mui.com/" target="_blank">MUI</a>
+      <a href="https://magicui.design/" target="_blank">MagicUI</a>
+      <a href="https://www.heroui.com/docs/guide/introduction" target="_blank">HeroUI</a>
+      <a href="https://daisyui.com/components/" target="_blank">DaisyUI</a>
+      <a href="https://ui.shadcn.com/" target="_blank">ShadCN UI</a>
+      <a href="https://ui.aceternity.com/components" target="_blank">Aceternity UI</a>
+    </div>
+  </div>
+
+  <!-- Example of another category (You can duplicate this) -->
+  <div class="category">
+    <div class="category-header">Design <span>▶</span></div>
+    <div class="links">
+      <a href="#">Dribbble</a>
+      <a href="#">Behance</a>
+      <a href="#">Figma Resources</a>
+      <a href="#">Icons8</a>
+    </div>
+  </div>
+
+  <footer>© 2026 K Library</footer>
+
+  <script>
+    const headers = document.querySelectorAll('.category-header');
+    headers.forEach(header => {
+      header.addEventListener('click', () => {
+        const links = header.nextElementSibling;
+        const open = links.classList.toggle('show');
+        header.classList.toggle('open', open);
+      });
+    });
+  </script>
+</body>
+</html>
 
