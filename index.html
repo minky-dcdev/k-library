@@ -32,7 +32,7 @@ h1 {
   text-shadow: 0 0 25px rgba(0,255,255,0.25);
 }
 
-/* ---- Card ---- */
+/* ---- Category Card ---- */
 .category {
   width: 100%;
   max-width: 900px;
@@ -41,6 +41,7 @@ h1 {
   border: 1px solid #1f1f1f;
   overflow: hidden;
   backdrop-filter: blur(8px);
+  margin-bottom: 25px;
 }
 
 /* ---- Header ---- */
@@ -75,7 +76,7 @@ h1 {
 }
 
 .category.open .content {
-  max-height: 1000px;
+  max-height: 1200px;
   opacity: 1;
 }
 
@@ -83,8 +84,8 @@ h1 {
   padding: 14px 22px;
   font-weight: 600;
   color: #aaa;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
+  font-size: 0.85rem;
+  letter-spacing: 1.2px;
 }
 
 /* ---- Links ---- */
@@ -94,7 +95,7 @@ a {
   text-decoration: none;
   color: #00ffff;
   position: relative;
-  transition: color 0.4s ease, background 0.4s ease;
+  transition: color 0.4s ease;
 }
 
 a::after {
@@ -136,7 +137,8 @@ footer {
 
 <h1>K Library</h1>
 
-<div class="category" id="coding">
+<!-- CODING -->
+<div class="category">
   <div class="category-header">
     Coding
     <span class="arrow">▶</span>
@@ -162,14 +164,33 @@ footer {
   </div>
 </div>
 
+<!-- FREE GAMES -->
+<div class="category">
+  <div class="category-header">
+    Free Games
+    <span class="arrow">▶</span>
+  </div>
+
+  <div class="content">
+    <div class="section-title">PIRATING</div>
+    <a href="https://steamunlocked.org/all-games/" target="_blank">SteamUnlocked</a>
+    <a href="https://fitgirl-repacks.site/popular-repacks/" target="_blank">FitGirl Repacks</a>
+
+    <div class="section-title">INFO</div>
+    <a href="https://steamdb.info/" target="_blank">SteamDB</a>
+
+    <div class="section-title">TOOLS</div>
+    <a href="https://kernelos.org/games/" target="_blank">KernelOS Games</a>
+  </div>
+</div>
+
 <footer>© 2026 K Library</footer>
 
 <script>
-const category = document.querySelector(".category");
-const header = document.querySelector(".category-header");
-
-header.addEventListener("click", () => {
-  category.classList.toggle("open");
+document.querySelectorAll(".category").forEach(category => {
+  category.querySelector(".category-header").addEventListener("click", () => {
+    category.classList.toggle("open");
+  });
 });
 </script>
 
