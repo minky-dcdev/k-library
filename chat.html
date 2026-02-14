@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Neon Chat</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
+  <path fill='%2300bfff' d='M17.342 0a3.674 3.674 0 0 0-3.647 3.674 3.673 3.673 0 0 0 3.673 3.673A3.674 3.674 0 1 0 17.342 0zM4.623.16a2.746 2.746 0 0 0-2.747 2.747v18.167a2.747 2.747 0 1 0 5.494 0V2.907A2.749 2.749 0 0 0 4.623.16zm6.95 7.208a2.729 2.729 0 0 0-2.237 4.294l7.81 11.155a2.729 2.729 0 1 0 4.471-3.131L13.807 8.53a2.729 2.729 0 0 0-2.234-1.163z'/>
+  </svg>">
+
+  <style>
+    :root {
+      --bg-color: #05050a;
+      --text-color: #e0f7ff;
+      --accent-color: #00d4ff;
+      --accent-glow: rgba(0, 212, 255, 0.4);
+      --bubble-you: rgba(0, 180, 240, 0.18);
+      --bubble-other: rgba(120, 120, 140, 0.14);
+      --header-bg: rgba(255,255,255,0.04);
+      --input-bg: rgba(20,20,35,0.6);
+      --border-glass: rgba(255,255,255,0.08);
+      --glow-soft: 0 0 12px rgba(0, 212, 255, 0.35);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Matrix rain background — same style as before */
+    .matrix-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      user-select: none;
+      background: var(--bg-color);
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+      grid-auto-rows: 38px;
+      font-size: 2.1rem;
+      color: rgba(0, 180, 255, 0.35);
+      font-family: "Courier New", monospace;
+      text-align: center;
+      line-height: 1;
+      will-change: transform, opacity;
+      transform: translate3d(0,0,0);
+    }
+
+    .matrix-bg span {
+      text-shadow: 0 0 6px rgba(0, 180, 255, 0.5);
+      transition: color 0.6s, text-shadow 0.6s;
+      opacity: 0.92;
+    }
+
+    @keyframes pulse-glow {
+      0%,100% { color: rgba(0,180,255,0.38); text-shadow: 0 0 6px rgba(0,180,255,0.5); }
+      35%     { color: rgba(80,220,255,0.95); text-shadow: 0 0 12px rgba(80,220,255,0.9), 0 0 20px rgba(80,220,255,0.5); }
+      55%     { color: rgba(255,100,220,0.9);  text-shadow: 0 0 14px rgba(255,100,220,0.8), 0 0 24px rgba(255,100,220,0.4); }
+      75%     { color: #f0f8ff; text-shadow: 0 0 10px #fff, 0 0 18px #fff, 0 0 28px rgba(255,255,255,0.6); }
+    }
+
+    .matrix-bg span:nth-child(13n+3)  { animation: pulse-glow 4.2s infinite; }
+    .matrix-bg span:nth-child(17n+7)  { animation: pulse-glow 5.1s infinite 0.8s; }
+    .matrix-bg span:nth-child(23n+4)  { animation: pulse-glow 3.8s infinite 1.4s; }
+    .matrix-bg span:nth-child(31n+11) { animation: pulse-glow 4.9s infinite 0.3s; color: rgba(120,220,255,0.7); }
+
+    .chat-container {
+      position: relative;
+      z-index: 10;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .chat-header h2 {
+      font-size: 1.3rem;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #00ff9d;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ff9d;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 0.7; transform: scale(1); }
+      50%     { opacity: 1; transform: scale(1.3); }
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,180,255,0.3) transparent;
+    }
+
+    .messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .messages::-webkit-scrollbar-thumb {
+      background: rgba(0,180,255,0.25);
+      border-radius: 3px;
+    }
+
+    .message {
+      max-width: 78%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      line-height: 1.45;
+      position: relative;
+      word-wrap: break-word;
+      font-size: 0.97rem;
+    }
+
+    .message.you {
+      align-self: flex-end;
+      background: var(--bubble-you);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(0, 180, 255, 0.22);
+      border-bottom-right-radius: 4px;
+      box-shadow: var(--glow-soft);
+    }
+
+    .message.other {
+      align-self: flex-start;
+      background: var(--bubble-other);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(180,180,200,0.14);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 8px;
+      display: block;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    }
+
+    .message audio {
+      margin-top: 8px;
+      width: 100%;
+      filter: brightness(1.15) hue-rotate(190deg);
+    }
+
+    .message .file-link {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-color);
+      text-decoration: none;
+      background: rgba(255,255,255,0.06);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,212,255,0.2);
+    }
+
+    .message .file-link:hover {
+      background: rgba(0,212,255,0.15);
+    }
+
+    .message .time {
+      font-size: 0.74rem;
+      opacity: 0.6;
+      margin-top: 6px;
+      display: block;
+      text-align: right;
+    }
+
+    .input-area {
+      flex-shrink: 0;
+      padding: 16px 20px;
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-glass);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #message-input {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+      resize: none;
+      min-height: 48px;
+      max-height: 140px;
+      line-height: 1.4;
+    }
+
+    #message-input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.18);
+    }
+
+    .btn {
+      background: rgba(0,212,255,0.18);
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.22s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: rgba(0,212,255,0.32);
+      box-shadow: var(--glow-soft);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .typing {
+      align-self: flex-start;
+      color: rgba(0,212,255,0.7);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 10px 16px;
+      opacity: 0.8;
+      animation: blink 1.4s infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity: 0.5; }
+      50%     { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .messages { padding: 12px; }
+      .message { max-width: 84%; }
+      .input-area { padding: 12px; }
+      .btn { padding: 10px 14px; font-size: 0.92rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="matrix-bg" id="matrix"></div>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="status-dot"></div>
+      <h2>Neon Contact</h2>
+    </div>
+
+    <div class="messages" id="messages">
+      <!-- messages appear here -->
+    </div>
+
+    <div class="input-area">
+      <input type="file" id="file-input" accept="image/*,audio/*,.pdf,.zip,.rar,.docx,.txt" hidden />
+      <button class="btn" onclick="document.getElementById('file-input').click()">📎</button>
+      
+      <textarea id="message-input" rows="1" placeholder="Type a message..."></textarea>
+      
+      <button class="btn" id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Matrix background (same feeling as your library)
+    const matrix = document.getElementById('matrix');
+    const chars = 'アアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ0123456789$+-*/=%#&@';
+    for (let i = 0; i < 1800; i++) {
+      const span = document.createElement('span');
+      span.textContent = chars[Math.floor(Math.random() * chars.length)];
+      matrix.appendChild(span);
+    }
+
+    // Chat logic
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    const fileInput = document.getElementById('file-input');
+
+    let messages = JSON.parse(localStorage.getItem('neonChatMessages')) || [];
+
+    function saveMessages() {
+      localStorage.setItem('neonChatMessages', JSON.stringify(messages));
+    }
+
+    function formatTime() {
+      const now = new Date();
+      return now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+
+    function addMessage(text = '', isYou = true, type = 'text', fileUrl = '', fileName = '') {
+      const msg = { text, isYou, type, fileUrl, fileName, time: formatTime() };
+      messages.push(msg);
+      saveMessages();
+      renderMessage(msg);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function renderMessage(msg) {
+      const div = document.createElement('div');
+      div.className = `message ${msg.isYou ? 'you' : 'other'}`;
+
+      if (msg.type === 'text') {
+        div.innerHTML = msg.text.replace(/\n/g, '<br>');
+      } else if (msg.type === 'image') {
+        const img = document.createElement('img');
+        img.src = msg.fileUrl;
+        img.alt = "Shared image";
+        div.appendChild(img);
+      } else if (msg.type === 'audio') {
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = msg.fileUrl;
+        div.innerHTML = `<strong>Voice message</strong><br>`;
+        div.appendChild(audio);
+      } else if (msg.type === 'file') {
+        const a = document.createElement('a');
+        a.href = msg.fileUrl;
+        a.download = msg.fileName;
+        a.className = 'file-link';
+        a.innerHTML = `📄 ${msg.fileName}`;
+        div.innerHTML = `<strong>File shared</strong><br>`;
+        div.appendChild(a);
+      }
+
+      const time = document.createElement('span');
+      time.className = 'time';
+      time.textContent = msg.time;
+      div.appendChild(time);
+
+      messagesDiv.appendChild(div);
+    }
+
+    // Load saved messages
+    messages.forEach(renderMessage);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    // Send text message
+    function sendText() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage(text, true, 'text');
+      input.value = '';
+
+      // Fake reply after a delay
+      setTimeout(() => {
+        const replies = [
+          "Got it 🔥",
+          "Nice one",
+          "Wait... really? 😳",
+          "Sending that right now",
+          "brb checking",
+          "lol that's wild",
+          "on my way",
+          "🔥🔥🔥"
+        ];
+        addMessage(replies[Math.floor(Math.random() * replies.length)], false, 'text');
+      }, 800 + Math.random() * 1200);
+    }
+
+    sendBtn.onclick = sendText;
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendText();
+      }
+    });
+
+    // Auto-resize textarea
+    input.addEventListener('input', () => {
+      input.style.height = 'auto';
+      input.style.height = (input.scrollHeight) + 'px';
+    });
+
+    // File / image / voice handling
+    fileInput.onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const url = ev.target.result;
+
+        if (file.type.startsWith('image/')) {
+          addMessage('', true, 'image', url);
+        } else if (file.type.startsWith('audio/')) {
+          addMessage('', true, 'audio', url);
+        } else {
+          addMessage('', true, 'file', url, file.name);
+        }
+      };
+      reader.readAsDataURL(file);
+    };
+
+  </script>
+</body>
+</html>
