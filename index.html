@@ -2,12 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
 <path fill='%23ffffff' d='M17.342 0a3.674 3.674 0 0 0-3.647 3.674a3.673 3.673 0 0 0 3.673 3.673A3.674 3.674 0 1 0 17.342 0zM4.623.16a2.746 2.746 0 0 0-2.747 2.747v18.167a2.747 2.747 0 1 0 5.494 0V2.907A2.749 2.749 0 0 0 4.623.16zm6.95 7.208a2.729 2.729 0 0 0-2.237 4.294l7.81 11.155a2.729 2.729 0 1 0 4.471-3.131L13.807 8.53a2.729 2.729 0 0 0-2.234-1.163z'/>
 </svg>">
     <style>
+        :root {
+            --bg-color: #05050a;
+            --text-color: #ffffff;
+            --accent-color: #00bfff; /* Softer cyan-blue for links */
+            --header-bg: rgba(255, 255, 255, 0.05);
+            --content-bg: rgba(255, 255, 255, 0.03);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --glow-color: rgba(0, 191, 255, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,19 +27,21 @@
         }
 
         body {
-            color: white;
-            background: #050505;
+            color: var(--text-color);
+            background: var(--bg-color);
             overflow-x: hidden;
-            line-height: 1.4;
+            line-height: 1.6;
             min-height: 100vh;
             position: relative;
+            scroll-behavior: smooth;
         }
 
         h1 {
             text-align: center;
-            font-size: 3rem;
-            margin: 40px 0;
-            letter-spacing: 2px;
+            font-size: 2.5rem;
+            margin: 40px 0 20px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px var(--shadow-color);
             position: relative;
             z-index: 10;
         }
@@ -44,7 +57,7 @@
         .profiles {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
             margin-bottom: 40px;
             flex-wrap: wrap;
         }
@@ -53,83 +66,109 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            background: var(--content-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--glow-color);
         }
 
         .profile svg {
             height: 24px;
             width: 24px;
+            fill: var(--text-color);
         }
 
-        .profile a {
-            color: #00eaff;
+        .profile a,
+        .profile span {
+            color: var(--accent-color);
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .profile a:hover {
-            opacity: 0.8;
+            color: #ffffff;
         }
 
         .category {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(6px);
+            background: var(--content-bg);
+            backdrop-filter: blur(8px);
             overflow: hidden;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: box-shadow 0.3s ease;
             position: relative;
             z-index: 10;
         }
 
+        .category:hover {
+            box-shadow: 0 6px 16px var(--glow-color);
+        }
+
         .category-header {
-            padding: 18px;
-            font-size: 1.3rem;
+            padding: 16px 20px;
+            font-size: 1.25rem;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.05);
-            transition: 0.3s;
+            background: var(--header-bg);
+            transition: background 0.3s ease;
+            font-weight: 600;
         }
 
         .category-header:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .category-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
         }
 
         .category.open .category-content {
             max-height: 2000px;
+            padding: 10px 0;
         }
 
         .sub {
-            padding: 15px 25px;
+            padding: 12px 24px;
         }
 
         .sub h3 {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 1.1rem;
-            opacity: 0.8;
+            opacity: 0.9;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
         }
 
         a {
             display: block;
-            color: #00eaff;
+            color: var(--accent-color);
             text-decoration: none;
-            margin: 6px 0;
-            opacity: .7;
-            transition: .3s;
+            margin: 8px 0;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.3s ease, padding-left 0.3s ease, color 0.3s ease;
+            opacity: 1;
         }
 
         a:hover {
-            opacity: 1;
-            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.05);
+            padding-left: 14px;
+            color: #ffffff;
+            box-shadow: inset 0 0 8px var(--glow-color);
         }
 
-        /* ────────────────────────────────────────
-           Matrix background (replaced cyber-pattern)
-        ──────────────────────────────────────── */
+        /* Matrix background */
         .jp-matrix {
-            background-color: #05050a;
+            background-color: var(--bg-color);
             width: 100%;
             height: 100vh;
             overflow: hidden;
@@ -189,6 +228,47 @@
                 text-shadow: 0 0 10px #fff,
                              0 0 15px #fff,
                              0 0 20px #fff;
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                margin: 30px 0 15px;
+            }
+
+            .profiles {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .profile {
+                justify-content: center;
+            }
+
+            .category-header {
+                font-size: 1.15rem;
+                padding: 14px 18px;
+            }
+
+            .sub {
+                padding: 10px 20px;
+            }
+
+            .sub h3 {
+                font-size: 1rem;
+            }
+
+            a {
+                font-size: 0.95rem;
+                padding: 8px 12px;
+            }
+
+            .jp-matrix {
+                font-size: 24px;
+                grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+                grid-auto-rows: 30px;
             }
         }
     </style>
@@ -298,7 +378,128 @@
         ><span>タ</span><span>チ</span><span>ツ</span><span>テ</span><span>ト</span
         ><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span
         ><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span>
-        <!-- ... you can repeat or add more spans if you want it denser ... -->
+        <span>ア</span><span>イ</span><span>ウ</span><span>エ</span><span>オ</span
+        ><span>カ</span><span>キ</span><span>ク</span><span>ケ</span><span>コ</span
+        ><span>サ</span><span>シ</span><span>ス</span><span>セ</span><span>ソ</span
+        ><span>タ</span><span>チ</span><span>ツ</span><span>テ</span><span>ト</span
+        ><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span
+        ><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span
+        ><span>マ</span><span>ミ</span><span>ム</span><span>メ</span><span>モ</span
+        ><span>ヤ</span><span>ユ</span><span>ヨ</span><span>ラ</span><span>リ</span
+        ><span>ル</span><span>レ</span><span>ロ</span><span>ワ</span><span>ヲ</span
+        ><span>ン</span><span>ガ</span><span>ギ</span><span>グ</span><span>ゲ</span
+        ><span>ゴ</span><span>ザ</span><span>ジ</span><span>ズ</span><span>ゼ</span
+        ><span>ゾ</span><span>ダ</span><span>ヂ</span><span>ヅ</span><span>デ</span
+        ><span>ド</span><span>バ</span><span>ビ</span><span>ブ</span><span>ベ</span
+        ><span>ボ</span><span>パ</span><span>ピ</span><span>プ</span><span>ペ</span
+        ><span>ポ</span><span>ア</span><span>イ</span><span>ウ</span><span>エ</span
+        ><span>オ</span><span>カ</span><span>キ</span><span>ク</span><span>ケ</span
+        ><span>コ</span><span>サ</span><span>シ</span><span>ス</span><span>セ</span
+        ><span>ソ</span><span>タ</span><span>チ</span><span>ツ</span><span>テ</span
+        ><span>ト</span><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span
+        ><span>ノ</span><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span
+        ><span>ホ</span> <span>ア</span><span>イ</span><span>ウ</span><span>エ</span
+        ><span>オ</span><span>カ</span><span>キ</span><span>ク</span><span>ケ</span
+        ><span>コ</span><span>サ</span><span>シ</span><span>ス</span><span>セ</span
+        ><span>ソ</span><span>タ</span><span>チ</span><span>ツ</span><span>テ</span
+        ><span>ト</span><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span
+        ><span>ノ</span><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span
+        ><span>ホ</span><span>マ</span><span>ミ</span><span>ム</span><span>メ</span
+        ><span>モ</span><span>ヤ</span><span>ユ</span><span>ヨ</span><span>ラ</span
+        ><span>リ</span><span>ル</span><span>レ</span><span>ロ</span><span>ワ</span
+        ><span>ヲ</span><span>ン</span><span>ガ</span><span>ギ</span><span>グ</span
+        ><span>ゲ</span><span>ゴ</span><span>ザ</span><span>ジ</span><span>ズ</span
+        ><span>ゼ</span><span>ゾ</span><span>ダ</span><span>ヂ</span><span>ヅ</span
+        ><span>デ</span><span>ド</span><span>バ</span><span>ビ</span><span>ブ</span
+        ><span>ベ</span><span>ボ</span><span>パ</span><span>ピ</span><span>プ</span
+        ><span>ペ</span><span>ポ</span><span>ア</span><span>イ</span><span>ウ</span
+        ><span>エ</span><span>オ</span><span>カ</span><span>キ</span><span>ク</span
+        ><span>ケ</span><span>コ</span><span>サ</span><span>シ</span><span>ス</span
+        ><span>セ</span><span>ソ</span><span>タ</span><span>チ</span><span>ツ</span
+        ><span>テ</span><span>ト</span><span>ナ</span><span>ニ</span><span>ヌ</span
+        ><span>ネ</span><span>ノ</span><span>ハ</span><span>ヒ</span><span>フ</span
+        ><span>ヘ</span><span>ホ</span> <span>ア</span><span>イ</span><span>ウ</span
+        ><span>エ</span><span>オ</span><span>カ</span><span>キ</span><span>ク</span
+        ><span>ケ</span><span>コ</span><span>サ</span><span>シ</span><span>ス</span
+        ><span>セ</span><span>ソ</span><span>タ</span><span>チ</span><span>ツ</span
+        ><span>テ</span><span>ト</span><span>ナ</span><span>ニ</span><span>ヌ</span
+        ><span>ネ</span><span>ノ</span><span>ハ</span><span>ヒ</span><span>フ</span
+        ><span>ヘ</span><span>ホ</span><span>マ</span><span>ミ</span><span>ム</span
+        ><span>メ</span><span>モ</span><span>ヤ</span><span>ユ</span><span>ヨ</span
+        ><span>ラ</span><span>リ</span><span>ル</span><span>レ</span><span>ロ</span
+        ><span>ワ</span><span>ヲ</span><span>ン</span><span>ガ</span><span>ギ</span
+        ><span>グ</span><span>ゲ</span><span>ゴ</span><span>ザ</span><span>ジ</span
+        ><span>ズ</span><span>ゼ</span><span>ゾ</span><span>ダ</span><span>ヂ</span
+        ><span>ヅ</span><span>デ</span><span>ド</span><span>バ</span><span>ビ</span
+        ><span>ブ</span><span>ベ</span><span>ボ</span><span>パ</span><span>ピ</span
+        ><span>プ</span><span>ペ</span><span>ポ</span><span>ア</span><span>イ</span
+        ><span>ウ</span><span>エ</span><span>オ</span><span>カ</span><span>キ</span
+        ><span>ク</span><span>ケ</span><span>コ</span><span>サ</span><span>シ</span
+        ><span>ス</span><span>セ</span><span>ソ</span><span>タ</span><span>チ</span
+        ><span>ツ</span><span>テ</span><span>ト</span><span>ナ</span><span>ニ</span
+        ><span>ヌ</span><span>ネ</span><span>ノ</span><span>ハ</span><span>ヒ</span
+        ><span>フ</span><span>ヘ</span><span>ホ</span> <span>ア</span><span>イ</span
+        ><span>ウ</span><span>エ</span><span>オ</span><span>カ</span><span>キ</span
+        ><span>ク</span><span>ケ</span><span>コ</span><span>サ</span><span>シ</span
+        ><span>ス</span><span>セ</span><span>ソ</span><span>タ</span><span>チ</span
+        ><span>ツ</span><span>テ</span><span>ト</span><span>ナ</span><span>ニ</span
+        ><span>ヌ</span><span>ネ</span><span>ノ</span><span>ハ</span><span>ヒ</span
+        ><span>フ</span><span>ヘ</span><span>ホ</span><span>マ</span><span>ミ</span
+        ><span>ム</span><span>メ</span><span>モ</span><span>ヤ</span><span>ユ</span
+        ><span>ヨ</span><span>ラ</span><span>リ</span><span>ル</span><span>レ</span
+        ><span>ロ</span><span>ワ</span><span>ヲ</span><span>ン</span><span>ガ</span
+        ><span>ギ</span><span>グ</span><span>ゲ</span><span>ゴ</span><span>ザ</span
+        ><span>ジ</span><span>ズ</span><span>ゼ</span><span>ゾ</span><span>ダ</span
+        ><span>ヂ</span><span>ヅ</span><span>デ</span><span>ド</span><span>バ</span
+        ><span>ビ</span><span>ブ</span><span>ベ</span><span>ボ</span><span>パ</span
+        ><span>ピ</span><span>プ</span><span>ペ</span><span>ポ</span><span>ア</span
+        ><span>イ</span><span>ウ</span><span>エ</span><span>オ</span><span>カ</span
+        ><span>キ</span><span>ク</span><span>ケ</span><span>コ</span><span>サ</span
+        ><span>シ</span><span>ス</span><span>セ</span><span>ソ</span><span>タ</span
+        ><span>チ</span><span>ツ</span><span>テ</span><span>ト</span><span>ナ</span
+        ><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span><span>ハ</span
+        ><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span> <span>ア</span
+        ><span>イ</span><span>ウ</span><span>エ</span><span>オ</span><span>カ</span
+        ><span>キ</span><span>ク</span><span>ケ</span><span>コ</span><span>サ</span
+        ><span>シ</span><span>ス</span><span>セ</span><span>ソ</span><span>タ</span
+        ><span>チ</span><span>ツ</span><span>テ</span><span>ト</span><span>ナ</span
+        ><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span><span>ハ</span
+        ><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span><span>マ</span
+        ><span>ミ</span><span>ム</span><span>メ</span><span>モ</span><span>ヤ</span
+        ><span>ユ</span><span>ヨ</span><span>ラ</span><span>リ</span><span>ル</span
+        ><span>レ</span><span>ロ</span><span>ワ</span><span>ヲ</span><span>ン</span
+        ><span>ガ</span><span>ギ</span><span>グ</span><span>ゲ</span><span>ゴ</span
+        ><span>ザ</span><span>ジ</span><span>ズ</span><span>ゼ</span><span>ゾ</span
+        ><span>ダ</span><span>ヂ</span><span>ヅ</span><span>デ</span><span>ド</span
+        ><span>バ</span><span>ビ</span><span>ブ</span><span>ベ</span><span>ボ</span
+        ><span>パ</span><span>ピ</span><span>プ</span><span>ペ</span><span>ポ</span
+        ><span>ア</span><span>イ</span><span>ウ</span><span>エ</span><span>オ</span
+        ><span>カ</span><span>キ</span><span>ク</span><span>ケ</span><span>コ</span
+        ><span>サ</span><span>シ</span><span>ス</span><span>セ</span><span>ソ</span
+        ><span>タ</span><span>チ</span><span>ツ</span><span>テ</span><span>ト</span
+        ><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span
+        ><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span>
+        <span>ア</span><span>イ</span><span>ウ</span><span>エ</span><span>オ</span
+        ><span>カ</span><span>キ</span><span>ク</span><span>ケ</span><span>コ</span
+        ><span>サ</span><span>シ</span><span>ス</span><span>セ</span><span>ソ</span
+        ><span>タ</span><span>チ</span><span>ツ</span><span>テ</span><span>ト</span
+        ><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span
+        ><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span
+        ><span>マ</span><span>ミ</span><span>ム</span><span>メ</span><span>モ</span
+        ><span>ヤ</span><span>ユ</span><span>ヨ</span><span>ラ</span><span>リ</span
+        ><span>ル</span><span>レ</span><span>ロ</span><span>ワ</span><span>ヲ</span
+        ><span>ン</span><span>ガ</span><span>ギ</span><span>グ</span><span>ゲ</span
+        ><span>ゴ</span><span>ザ</span><span>ジ</span><span>ズ</span><span>ゼ</span
+        ><span>ゾ</span><span>ダ</span><span>ヂ</span><span>ヅ</span><span>デ</span
+        ><span>ド</span><span>バ</span><span>ビ</span><span>ブ</span><span>ベ</span
+        ><span>ボ</span><span>パ</span><span>ピ</span><span>プ</span><span>ペ</span
+        ><span>ポ</span><span>ア</span><span>イ</span><span>ウ</span><span>エ</span
+        ><span>オ</span><span>カ</span><span>キ</span><span>ク</span><span>ケ</span
+        ><span>コ</span><span>サ</span><span>シ</span><span>ス</span><span>セ</span
+        ><span>ソ</span><span>タ</span><span>チ</span><span>ツ</span><span>テ</span
+        ><span>ト</span><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span
+        ><span>ノ</span><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span
+        ><span>ホ</span>
     </div>
 
     <h1>
@@ -324,13 +525,14 @@
                 </svg>
                 <a href="https://open.spotify.com/user/31pitlwncx3vnjk7yq5qzsex6d4u?si=4f9ba7351dbf46dd">itz.karas</a>
             </div>
-            <!-- other profiles... -->
+            <!-- YOUTUBE -->
             <div class="profile">
                 <svg viewBox="0 0 24 24" width="24" height="24">
                     <path fill="#ffffff" d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                 </svg>
                 <a href="https://www.youtube.com/@priv_karas">priv_karas</a>
             </div>
+            <!-- TIKTOK -->
             <div class="profile">
                 <svg viewBox="0 0 24 24" width="24" height="24">
                     <path fill="#ffffff" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02c.08 1.53.63 3.09 1.75 4.17c1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97c-.57-.26-1.1-.59-1.62-.93c-.01 2.92.01 5.84-.02 8.75c-.08 1.4-.54 2.79-1.35 3.94c-1.31 1.92-3.58 3.17-5.91 3.21c-1.43.08-2.86-.31-4.08-1.03c-2.02-1.19-3.44-3.37-3.65-5.71c-.02-.5-.03-1-.01-1.49c.18-1.9 1.12-3.72 2.58-4.96c1.66-1.44 3.98-2.13 6.15-1.72c.02 1.48-.04 2.96-.04 4.44c-.99-.32-2.15-.23-3.02.37c-.63.41-1.11 1.04-1.36 1.75c-.21.51-.15 1.07-.14 1.61c.24 1.64 1.82 3.02 3.5 2.87c1.12-.01 2.19-.66 2.77-1.61c.19-.33.4-.67.41-1.06c.1-1.79.06-3.57.07-5.36c.01-4.03-.01-8.05.02-12.07z"/>
