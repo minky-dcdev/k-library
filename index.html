@@ -12,7 +12,7 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-body{color:white;background:#050505;overflow-x:hidden;line-height:1.4;}
+body{color:white;background:#050505;overflow-x:hidden;line-height:1.4;position:relative;}
 h1{text-align:center;font-size:3rem;margin:40px 0;letter-spacing:2px;}
 .container{max-width:900px;margin:auto;padding:20px;}
 .category{margin-bottom:20px;border-radius:12px;background:rgba(255,255,255,0.03);backdrop-filter:blur(6px);overflow:hidden}
@@ -22,11 +22,11 @@ h1{text-align:center;font-size:3rem;margin:40px 0;letter-spacing:2px;}
 .category.open .category-content{max-height:1000px}
 .sub{padding:15px 25px}
 .sub h3{margin-bottom:10px;font-size:1.1rem;opacity:0.8}
-a{display:block;color:#00eaff;text-decoration:none;margin:6px 0;opacity:.7;transition:.3s}
+a{display:block;color:#00eaff;text-decoration:none;margin:6px 0;opacity:.7;transition:.3s;cursor:pointer;}
 a:hover{opacity:1;transform:translateX(4px)}
 
 .cyber-pattern{
-  position:fixed;inset:0;z-index:-1;
+  position:fixed;inset:0;z-index:-2;
   background-color:#050505;
   background-image:
     linear-gradient(rgba(3,233,244,0.08) 1px, transparent 1px),
@@ -37,6 +37,22 @@ a:hover{opacity:1;transform:translateX(4px)}
 @keyframes moveBG{
   from{background-position:0 0,0 0}
   to{background-position:60px 60px,60px 60px}
+}
+
+/* Cursor-follow light effect */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-1;
+    background: radial-gradient(
+        420px circle at var(--x,50%) var(--y,50%),
+        rgba(255,255,255,0.10),
+        rgba(255,255,255,0.05) 25%,
+        rgba(255,255,255,0.02) 40%,
+        transparent 65%
+    );
 }
 </style>
 </head>
@@ -136,6 +152,12 @@ a:hover{opacity:1;transform:translateX(4px)}
 
 <script>
 document.querySelectorAll('.category-header').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));
+
+// Mouse-tracking effect
+document.addEventListener("mousemove", e=>{
+  document.body.style.setProperty('--x',(e.clientX/window.innerWidth)*100+'%');
+  document.body.style.setProperty('--y',(e.clientY/window.innerHeight)*100+'%');
+});
 </script>
 </body>
 </html>
