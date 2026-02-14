@@ -186,6 +186,7 @@
             z-index: -1;
             pointer-events: none;
             user-select: none;
+            transform: translate3d(0, 0, 0); /* Force GPU acceleration */
         }
 
         .jp-matrix > span {
@@ -193,6 +194,7 @@
             text-shadow: 0 0 5px rgba(0, 150, 255, 0.5);
             transition: color 0.5s, text-shadow 0.5s;
             line-height: 1;
+            will-change: color, text-shadow; /* Optimize animation performance */
         }
 
         /* Pulse animations */
@@ -459,53 +461,12 @@
         ><span>シ</span><span>ス</span><span>セ</span><span>ソ</span><span>タ</span
         ><span>チ</span><span>ツ</span><span>テ</span><span>ト</span><span>ナ</span
         ><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span><span>ハ</span
-        ><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span> <span>ア</span
-        ><span>イ</span><span>ウ</span><span>エ</span><span>オ</span><span>カ</span
-        ><span>キ</span><span>ク</span><span>ケ</span><span>コ</span><span>サ</span
-        ><span>シ</span><span>ス</span><span>セ</span><span>ソ</span><span>タ</span
-        ><span>チ</span><span>ツ</span><span>テ</span><span>ト</span><span>ナ</span
-        ><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span><span>ハ</span
-        ><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span><span>マ</span
-        ><span>ミ</span><span>ム</span><span>メ</span><span>モ</span><span>ヤ</span
-        ><span>ユ</span><span>ヨ</span><span>ラ</span><span>リ</span><span>ル</span
-        ><span>レ</span><span>ロ</span><span>ワ</span><span>ヲ</span><span>ン</span
-        ><span>ガ</span><span>ギ</span><span>グ</span><span>ゲ</span><span>ゴ</span
-        ><span>ザ</span><span>ジ</span><span>ズ</span><span>ゼ</span><span>ゾ</span
-        ><span>ダ</span><span>ヂ</span><span>ヅ</span><span>デ</span><span>ド</span
-        ><span>バ</span><span>ビ</span><span>ブ</span><span>ベ</span><span>ボ</span
-        ><span>パ</span><span>ピ</span><span>プ</span><span>ペ</span><span>ポ</span
-        ><span>ア</span><span>イ</span><span>ウ</span><span>エ</span><span>オ</span
-        ><span>カ</span><span>キ</span><span>ク</span><span>ケ</span><span>コ</span
-        ><span>サ</span><span>シ</span><span>ス</span><span>セ</span><span>ソ</span
-        ><span>タ</span><span>チ</span><span>ツ</span><span>テ</span><span>ト</span
-        ><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span
-        ><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span>
-        <span>ア</span><span>イ</span><span>ウ</span><span>エ</span><span>オ</span
-        ><span>カ</span><span>キ</span><span>ク</span><span>ケ</span><span>コ</span
-        ><span>サ</span><span>シ</span><span>ス</span><span>セ</span><span>ソ</span
-        ><span>タ</span><span>チ</span><span>ツ</span><span>テ</span><span>ト</span
-        ><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span><span>ノ</span
-        ><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span
-        ><span>マ</span><span>ミ</span><span>ム</span><span>メ</span><span>モ</span
-        ><span>ヤ</span><span>ユ</span><span>ヨ</span><span>ラ</span><span>リ</span
-        ><span>ル</span><span>レ</span><span>ロ</span><span>ワ</span><span>ヲ</span
-        ><span>ン</span><span>ガ</span><span>ギ</span><span>グ</span><span>ゲ</span
-        ><span>ゴ</span><span>ザ</span><span>ジ</span><span>ズ</span><span>ゼ</span
-        ><span>ゾ</span><span>ダ</span><span>ヂ</span><span>ヅ</span><span>デ</span
-        ><span>ド</span><span>バ</span><span>ビ</span><span>ブ</span><span>ベ</span
-        ><span>ボ</span><span>パ</span><span>ピ</span><span>プ</span><span>ペ</span
-        ><span>ポ</span><span>ア</span><span>イ</span><span>ウ</span><span>エ</span
-        ><span>オ</span><span>カ</span><span>キ</span><span>ク</span><span>ケ</span
-        ><span>コ</span><span>サ</span><span>シ</span><span>ス</span><span>セ</span
-        ><span>ソ</span><span>タ</span><span>チ</span><span>ツ</span><span>テ</span
-        ><span>ト</span><span>ナ</span><span>ニ</span><span>ヌ</span><span>ネ</span
-        ><span>ノ</span><span>ハ</span><span>ヒ</span><span>フ</span><span>ヘ</span
-        ><span>ホ</span>
+        ><span>ヒ</span><span>フ</span><span>ヘ</span><span>ホ</span>
     </div>
 
     <h1>
         <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffffff' d='M17.342 0a3.674 3.674 0 0 0-3.647 3.674a3.673 3.673 0 0 0 3.673 3.673A3.674 3.674 0 1 0 17.342 0zM4.623.16a2.746 2.746 0 0 0-2.747 2.747v18.167a2.747 2.747 0 1 0 5.494 0V2.907A2.749 2.749 0 0 0 4.623.16zm6.95 7.208a2.729 2.729 0 0 0-2.237 4.294l7.81 11.155a2.729 2.729 0 1 0 4.471-3.131L13.807 8.53a2.729 2.729 0 0 0-2.234-1.163z'/></svg>" 
-             style="height:36px; vertical-align: -4px; margin-right:8px;">
+             style="height:36px; vertical-align: -2px; margin-right:6px;">
         Library
     </h1>
 
